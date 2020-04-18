@@ -4,11 +4,12 @@ copyClipBoardTemplate.innerHTML =
    <slot name="my-text" id="type">Put your text here!</slot>
    <button id="btn-copy">copy</button>
   </main>`;
-  
+
 class CopyClipboard extends HTMLElement {
   constructor() {
     super();
-    this.innerHTML = `This is a test`;
+    this.attachShadow({mode: 'open'})
+    this.shadowRoot.appendChild(copyClipBoardTemplate.content.cloneNode(true));
   }
 }
 
