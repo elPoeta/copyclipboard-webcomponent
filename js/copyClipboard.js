@@ -20,11 +20,55 @@ copyClipBoardTemplate.innerHTML =
        font-size: 1.2em;
        padding: 5px;
        border-radius: .3em;
+       cursor: pointer;
      }
+     .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 150px;
+      background-color: #555;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 150%;
+      left: 40%;
+      margin-left: -75px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .tooltip .tooltiptext::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 40%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #555 transparent transparent transparent;
+    }
+    
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+    
    </style>
    <main class="container">  
      <slot name="my-text">Put your text here!</slot>
-     <button id="btn-copy" class="btn-copy">	&#x1f4cb; Copy</button>
+     <div class="tooltip">
+       <button id="btn-copy" class="btn-copy">
+         <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>	
+         &#x1f4cb; Copy
+       </button>
+     </div>
    </main>`;
 
 class CopyClipboard extends HTMLElement {
@@ -36,7 +80,8 @@ class CopyClipboard extends HTMLElement {
   }
 
   connectedCallback() {
-    this.shadowRoot.querySelector('#btn-copy').addEventListener('click', () => this.copyToClipboard());  
+    this.shadowRoot.querySelector('#btn-copy').addEventListener('click', () => this.copyToClipboard());
+    this.shadowRoot.querySelector('#btn-copy').addEventListener('mouseout', () => this.clearTooltip());  
     this.elementType = this.shadowRoot.querySelector( 'slot' ).assignedNodes()[0] || document.createElement('div').constructor.name;
      if (this.elementType.nodeName && ( this.elementType.nodeName.toLowerCase() === 'input' || this.elementType.nodeName.toLowerCase() === 'textarea')) {
         this.elementType.setAttribute('readonly','');
@@ -54,6 +99,11 @@ class CopyClipboard extends HTMLElement {
     el.select(); 
     document.execCommand('copy');
     document.body.removeChild(el);
+    this.shadowRoot.querySelector('#myTooltip').innerHTML = 'Copied!';
+  }
+
+  clearTooltip() {
+    this.shadowRoot.querySelector('#myTooltip').innerHTML = 'Copy to clipboard';
   }
 
   disconnectedCallback() {
