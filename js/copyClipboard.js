@@ -13,6 +13,7 @@ class CopyClipboard extends HTMLElement {
   }
 
   connectedCallback() {
+    this.shadowRoot.querySelector('#btn-copy').addEventListener('click', () => this.copyToClipboard());
     const elementType = this.shadowRoot.querySelector( 'slot' ).assignedNodes()[0] || document.createElement('div').constructor.name;
      if (elementType.nodeName && ( elementType.nodeName.toLowerCase() === 'input' || elementType.nodeName.toLowerCase() === 'textarea' || elementType.nodeName.toLowerCase() === 'pre')) {
         console.log('node name ',elementType.nodeName )
@@ -21,6 +22,14 @@ class CopyClipboard extends HTMLElement {
         console.log('node name ',elementType.nodeName )
      }
   }
+
+  copyToClipboard() {
+   console.log('copied!');
+  }
+
+  disconnectedCallback() {
+    this.shadowRoot.querySelector('#btn-copy').removeEventListener();
+  } 
 }
 
 window.customElements.define('copy-clipboard',CopyClipboard);
