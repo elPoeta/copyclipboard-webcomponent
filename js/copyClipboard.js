@@ -1,7 +1,7 @@
 const copyClipBoardTemplate = document.createElement('template');
 copyClipBoardTemplate.innerHTML = 
   `<main>  
-   <slot name="my-text" id="type">Put your text here!</slot>
+   <slot name="my-text">Put your text here!</slot>
    <button id="btn-copy">copy</button>
   </main>`;
 
@@ -10,21 +10,28 @@ class CopyClipboard extends HTMLElement {
     super();
     this.attachShadow({mode: 'open'})
     this.shadowRoot.appendChild(copyClipBoardTemplate.content.cloneNode(true));
+    this.isSelectedTag = false;
   }
 
   connectedCallback() {
-    this.shadowRoot.querySelector('#btn-copy').addEventListener('click', () => this.copyToClipboard());
-    const elementType = this.shadowRoot.querySelector( 'slot' ).assignedNodes()[0] || document.createElement('div').constructor.name;
-     if (elementType.nodeName && ( elementType.nodeName.toLowerCase() === 'input' || elementType.nodeName.toLowerCase() === 'textarea' || elementType.nodeName.toLowerCase() === 'pre')) {
-        console.log('node name ',elementType.nodeName )
-        elementType.setAttribute('readonly',true);
-     } else {
-        console.log('node name ',elementType.nodeName )
-     }
+    this.shadowRoot.querySelector('#btn-copy').addEventListener('click', () => this.copyToClipboard());  
+    this.elementType = this.shadowRoot.querySelector( 'slot' ).assignedNodes()[0] || document.createElement('div').constructor.name;
+     if (this.elementType.nodeName && ( this.elementType.nodeName.toLowerCase() === 'input' || this.elementType.nodeName.toLowerCase() === 'textarea')) {
+        this.elementType.setAttribute('readonly','');
+        this.isSelectedTag = true;
+     } 
   }
 
   copyToClipboard() {
-   console.log('copied!');
+    const el = document.createElement('textarea');
+    el.value = this.isSelectedTag ? this.elementType.value : this.elementType.innerText;
+    el.setAttribute('readonly', '');
+    el.style.position = 'absolute';
+    el.style.left = '-100%';
+    document.body.appendChild(el);
+    el.select(); 
+    document.execCommand('copy');
+    document.body.removeChild(el);
   }
 
   disconnectedCallback() {
