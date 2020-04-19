@@ -1,9 +1,31 @@
 const copyClipBoardTemplate = document.createElement('template');
 copyClipBoardTemplate.innerHTML = 
-  `<main>  
-   <slot name="my-text">Put your text here!</slot>
-   <button id="btn-copy">copy</button>
-  </main>`;
+  `<style>
+     :host {
+       margin: 10px;
+       padding: 5px;
+     }
+     .container {
+       display: grid;
+       grid-template-columns: 80% 10%;
+       grid-gap: 10px;
+       justify-content: center;
+       align-items: center;  
+     }
+     .btn-copy {
+       border: 2px solid #555;
+       color: #555;
+       outline: none;
+       background: none;
+       font-size: 1.2em;
+       padding: 5px;
+       border-radius: .3em;
+     }
+   </style>
+   <main class="container">  
+     <slot name="my-text">Put your text here!</slot>
+     <button id="btn-copy" class="btn-copy">	&#x1f4cb; Copy</button>
+   </main>`;
 
 class CopyClipboard extends HTMLElement {
   constructor() {

@@ -5,11 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="./js/copyClipboard.js" defer></script>
   <title>Copy to ClipBoard - web component</title>
+  <style>
+    input{
+      padding: 8px;
+      border: 1px solid #222;
+    }
+    pre {
+      width: 99%;
+      padding: 5px;
+      margin: 0 auto;
+	    overflow: auto;
+	    line-height: 20px;
+	    background: #333;
+	    border: 2px solid #777;
+      height: 25px;
+      font-size: 1.3em;
+	    color: #fff;
+    }
+    p {
+      padding: 8px;
+      background: #dedede;
+      color: #222;
+
+    }
+  </style>
 </head>
 <body>
   <h1>Copy to ClipBoard</h1>
   <h2>Web Component</h2>
-  <copy-clipboard>
+  <copy-clipboard class="clip">
     <input slot="my-text" type="text" value="Temporibus maiores obcaecati eos. Copy me!!">
   </copy-clipboard>
   <copy-clipboard>
