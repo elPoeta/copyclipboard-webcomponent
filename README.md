@@ -1,2 +1,2 @@
 # copyclipboard-webcomponent
-Copy to clipboard web componet
+Copy to clipboard web component
